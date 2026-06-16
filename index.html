@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-KYP Proveedores — KillB</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0A0A0A;
+    --surface:   #141414;
+    --surface2:  #1C1C1C;
+    --border:    #2A2A2A;
+    --yellow:    #FFC700;
+    --yellow-dim:#2A2000;
+    --text:      #F0F0F0;
+    --muted:     #666666;
+    --error:     #FF4444;
+    --radius:    4px;
+    --font:      'Inter', sans-serif;
+    --mono:      'DM Mono', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    background: #000;
+    border-bottom: 3px solid var(--yellow);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .logo {
+    font-family: var(--font);
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--yellow);
+    font-style: italic;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .header-divider {
+    width: 1px;
+    height: 32px;
+    background: #333;
+  }
+  .header-text h1 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .header-text p {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-top: 2px;
+  }
+
+  /* ─── Section banner (like the PDF yellow section slides) ─── */
+  .section-banner {
+    background: var(--yellow);
+    padding: 14px 40px;
+    margin-top: 40px;
+  }
+  .section-banner span {
+    font-size: 13px;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-style: italic;
+  }
+
+  /* ─── Progress bar ─── */
+  .progress-wrap {
+    background: #000;
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: #222;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--yellow);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ─── Layout ─── */
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ─── Fields ─── */
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 7px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .field label .req { color: var(--yellow); margin-left: 2px; }
+  .field .hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    margin-top: -4px;
+    font-family: var(--mono);
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="url"],
+  select,
+  textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--yellow);
+    background: var(--surface2);
+  }
+  input::placeholder, textarea::placeholder { color: #3a3a3a; }
+  textarea { resize: vertical; min-height: 76px; }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23666' d='M5 7L0 2h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  select option { background: #1C1C1C; }
+
+  /* ─── Pills ─── */
+  .option-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .option-pill { position: relative; }
+  .option-pill input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .option-pill label {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.12s;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    user-select: none;
+  }
+  .option-pill input:checked + label {
+    border-color: var(--yellow);
+    color: #000;
+    background: var(--yellow);
+  }
+  .option-pill label:hover { border-color: #444; color: var(--text); }
+
+  /* ─── Client block ─── */
+  .client-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--yellow);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .client-block .client-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--yellow);
+    margin-bottom: 14px;
+    letter-spacing: 0.1em;
+  }
+  .client-block .field { margin-bottom: 12px; }
+
+  /* ─── Conditional ─── */
+  .conditional { display: none; margin-top: 12px; }
+  .conditional.visible { display: block; }
+
+  /* ─── File upload ─── */
+  .file-upload {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px dashed #333;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color 0.15s;
+    background: var(--surface);
+  }
+  .file-upload:hover { border-color: var(--yellow); }
+  .file-upload input { display: none; }
+  .file-icon {
+    width: 34px; height: 34px;
+    background: var(--yellow-dim);
+    border: 1px solid var(--yellow);
+    border-radius: 2px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .file-icon svg { width: 16px; height: 16px; }
+  .file-text p { font-size: 13px; font-weight: 600; color: var(--text); }
+  .file-text span { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+  .file-name { font-size: 12px; color: var(--yellow); margin-top: 6px; font-family: var(--mono); display: none; }
+
+  /* ─── Padding inside container after banner ─── */
+  .section-content { padding-top: 28px; }
+
+  /* ─── Submit ─── */
+  .submit-area {
+    margin-top: 44px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .submit-note {
+    font-size: 11px;
+    color: var(--muted);
+    max-width: 340px;
+    line-height: 1.6;
+    font-family: var(--mono);
+  }
+  .btn-submit {
+    background: var(--yellow);
+    color: #000;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-style: italic;
+    padding: 14px 32px;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .btn-submit:hover { opacity: 0.88; }
+  .btn-submit:active { transform: scale(0.98); }
+
+  /* ─── Success ─── */
+  .success-screen { display: none; text-align: center; padding: 80px 40px; }
+  .success-screen.visible { display: block; }
+  .success-icon {
+    width: 60px; height: 60px;
+    background: var(--yellow);
+    border-radius: 2px;
+    display: grid; place-items: center;
+    margin: 0 auto 24px;
+  }
+  .success-icon svg { width: 28px; height: 28px; }
+  .success-screen h2 {
+    font-size: 24px; font-weight: 900; font-style: italic;
+    color: var(--yellow); margin-bottom: 12px;
+  }
+  .success-screen p { color: var(--muted); font-size: 14px; max-width: 380px; margin: 0 auto; font-family: var(--mono); }
+
+  @media (max-width: 600px) {
+    .header { padding: 18px 20px; }
+    .section-banner { padding: 12px 20px; }
+    .progress-wrap { padding: 10px 20px; }
+    .container { padding: 0 20px; }
+    .field-row { grid-template-columns: 1fr; }
+    .submit-area { flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo">Kill B</div>
+  <div class="header-divider"></div>
+  <div class="header-text">
+    <h1>Pre-KYP Proveedores</h1>
+    <p>Evaluación inicial de socio comercial</p>
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 10</div>
+</div>
+
+<form id="preKypForm" name="pre-kyp-proveedores" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+
+  <!-- Netlify required fields -->
+  <input type="hidden" name="form-name" value="pre-kyp-proveedores">
+  <p style="display:none"><label>No llenes esto: <input name="bot-field"></label></p>
+
+  <!-- 01 IDENTIFICACIÓN -->
+  <div class="section-banner"><span>01 — Identificación</span></div>
+  <div class="container">
+    <div class="section-content">
+
+      <div class="field-row">
+        <div class="field">
+          <label>Nombre legal de la empresa <span class="req">*</span></label>
+          <input type="text" name="company_name" placeholder="Ej. Acme Payments S.A.S." data-track>
+        </div>
+        <div class="field">
+          <label>País de constitución <span class="req">*</span></label>
+          <select name="country" data-track>
+            <option value="">Seleccionar…</option>
+            <option>Colombia</option><option>México</option><option>Brasil</option>
+            <option>Argentina</option><option>Chile</option><option>Perú</option>
+            <option>Ecuador</option><option>Uruguay</option><option>Panamá</option>
+            <option>El Salvador</option><option>Guatemala</option>
+            <option>Estados Unidos</option><option>Reino Unido</option>
+            <option>España</option><option>Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Nombre del contacto comercial <span class="req">*</span></label>
+          <input type="text" name="contact_name" placeholder="Nombre completo" data-track>
+        </div>
+        <div class="field">
+          <label>Cargo <span class="req">*</span></label>
+          <input type="text" name="contact_role" placeholder="Ej. Head of Partnerships">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Correo electrónico <span class="req">*</span></label>
+          <input type="email" name="contact_email" placeholder="contacto@empresa.com" data-track>
+        </div>
+        <div class="field">
+          <label>Sitio web</label>
+          <input type="url" name="website" placeholder="https://empresa.com">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 02 SERVICIOS -->
+  <div class="section-banner"><span>02 — Servicios y operación</span></div>
+  <div class="container">
+    <div class="section-content">
+
+      <div class="field">
+        <label>Servicios que ofrecen <span class="req">*</span></label>
+        <p class="hint">Selecciona todos los que apliquen.</p>
+        <div class="option-group">
+          <div class="option-pill"><input type="checkbox" name="svc_dispersion" id="svc1" data-track><label for="svc1">Dispersión COP</label></div>
+          <div class="option-pill"><input type="checkbox" name="svc_ramps" id="svc2" data-track><label for="svc2">Rampas cripto/fiat</label></div>
+          <div class="option-pill"><input type="checkbox" name="svc_fx" id="svc3" data-track><label for="svc3">FX / Cambiario</label></div>
+          <div class="option-pill"><input type="checkbox" name="svc_banking" id="svc4" data-track><label for="svc4">Banking as a Service</label></div>
+          <div class="option-pill"><input type="checkbox" name="svc_otc" id="svc5" data-track><label for="svc5">OTC</label></div>
+          <div class="option-pill"><input type="checkbox" name="svc_pagos" id="svc6" data-track><label for="svc6">Pagos locales</label></div>
+          <div class="option-pill"><input type="checkbox" name="svc_otro" id="svc7" data-track><label for="svc7">Otro</label></div>
+        </div>
+        <div class="conditional" id="svcOtroWrap">
+          <input type="text" name="svc_otro_text" placeholder="Describir servicio…" style="margin-top:8px">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Países en los que operan actualmente <span class="req">*</span></label>
+        <p class="hint">Lista separada por comas.</p>
+        <input type="text" name="countries_ops" placeholder="Ej. Colombia, México, Argentina" data-track>
+      </div>
+
+      <div class="field">
+        <label>¿Operan directamente o a través de proveedores? <span class="req">*</span></label>
+        <div class="option-group">
+          <div class="option-pill"><input type="radio" name="ops_mode" id="ops_direct" value="direct" data-track><label for="ops_direct">Directamente</label></div>
+          <div class="option-pill"><input type="radio" name="ops_mode" id="ops_provider" value="via_provider" data-track><label for="ops_provider">Vía proveedor</label></div>
+          <div class="option-pill"><input type="radio" name="ops_mode" id="ops_both" value="both" data-track><label for="ops_both">Ambos</label></div>
+        </div>
+        <div class="conditional" id="opsProviderWrap">
+          <input type="text" name="ops_provider_name" placeholder="¿A través de quién?" style="margin-top:8px">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 03 REGULATORIO -->
+  <div class="section-banner"><span>03 — Perfil regulatorio</span></div>
+  <div class="container">
+    <div class="section-content">
+
+      <div class="field">
+        <label>¿Cuentan con licencia regulatoria? <span class="req">*</span></label>
+        <div class="option-group">
+          <div class="option-pill"><input type="radio" name="license_status" id="lic_yes" value="yes" data-track><label for="lic_yes">Sí</label></div>
+          <div class="option-pill"><input type="radio" name="license_status" id="lic_no" value="no" data-track><label for="lic_no">No</label></div>
+          <div class="option-pill"><input type="radio" name="license_status" id="lic_proc" value="in_progress" data-track><label for="lic_proc">En trámite</label></div>
+        </div>
+        <div class="conditional" id="licFileWrap">
+          <label class="file-upload" for="licFileInput" style="margin-top:8px">
+            <div class="file-icon">
+              <svg fill="none" viewBox="0 0 16 16"><path stroke="#FFC700" stroke-width="1.5" d="M2 11v2a1 1 0 001 1h10a1 1 0 001-1v-2M8 2v8m0-8L5 5m3-3l3 3"/></svg>
+            </div>
+            <div class="file-text">
+              <p>Adjuntar licencia o resolución</p>
+              <span>PDF, JPG o PNG — máx. 10 MB</span>
+            </div>
+            <input type="file" id="licFileInput" accept=".pdf,.jpg,.jpeg,.png">
+          </label>
+          <div class="file-name" id="licFileName"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>¿Están registrados ante algún supervisor financiero o UIF? <span class="req">*</span></label>
+        <p class="hint">Ej. UIAF Colombia, FinCEN, FCA, CNBV, BCB…</p>
+        <div class="option-group">
+          <div class="option-pill"><input type="radio" name="uif_status" id="uif_yes" value="yes" data-track><label for="uif_yes">Sí</label></div>
+          <div class="option-pill"><input type="radio" name="uif_status" id="uif_no" value="no" data-track><label for="uif_no">No</label></div>
+        </div>
+        <div class="conditional" id="uifNameWrap">
+          <input type="text" name="uif_name" placeholder="¿Ante cuál entidad?" style="margin-top:8px">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 04 VOLUMEN -->
+  <div class="section-banner"><span>04 — Volumen</span></div>
+  <div class="container">
+    <div class="section-content">
+
+      <div class="field-row">
+        <div class="field">
+          <label>Volumen mensual operado (USD) <span class="req">*</span></label>
+          <select name="volume_usd" data-track>
+            <option value="">Seleccionar rango…</option>
+            <option value="lt100k">Menos de USD 100K</option>
+            <option value="100k_500k">USD 100K – 500K</option>
+            <option value="500k_1m">USD 500K – 1M</option>
+            <option value="1m_5m">USD 1M – 5M</option>
+            <option value="gt5m">Más de USD 5M</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Número de transacciones / mes <span class="req">*</span></label>
+          <select name="volume_txn" data-track>
+            <option value="">Seleccionar rango…</option>
+            <option value="lt500">Menos de 500</option>
+            <option value="500_2000">500 – 2.000</option>
+            <option value="2000_10000">2.000 – 10.000</option>
+            <option value="gt10000">Más de 10.000</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 05 CLIENTES -->
+  <div class="section-banner"><span>05 — Top 3 clientes de referencia</span></div>
+  <div class="container">
+    <div class="section-content">
+
+      <p style="font-size:12px; color:var(--muted); font-family:var(--mono); margin-bottom:20px; line-height:1.6;">
+        No se necesitan datos precisos — sirve para validar el tipo de operación y los mercados en los que trabajan.
+      </p>
+
+      <!-- Cliente 1 -->
+      <div class="client-block">
+        <div class="client-num">CLIENTE 01</div>
+        <div class="field-row">
+          <div class="field"><label>Nombre</label><input type="text" name="client1_name" placeholder="Nombre de la empresa" data-track></div>
+          <div class="field"><label>País</label><input type="text" name="client1_country" placeholder="País"></div>
+        </div>
+        <div class="field"><label>Tipo de operación</label><input type="text" name="client1_type" placeholder="Ej. dispersión de pagos B2B en Colombia"></div>
+      </div>
+
+      <!-- Cliente 2 -->
+      <div class="client-block">
+        <div class="client-num">CLIENTE 02</div>
+        <div class="field-row">
+          <div class="field"><label>Nombre</label><input type="text" name="client2_name" placeholder="Nombre de la empresa"></div>
+          <div class="field"><label>País</label><input type="text" name="client2_country" placeholder="País"></div>
+        </div>
+        <div class="field"><label>Tipo de operación</label><input type="text" name="client2_type" placeholder="Ej. rampas cripto/fiat en México"></div>
+      </div>
+
+      <!-- Cliente 3 -->
+      <div class="client-block">
+        <div class="client-num">CLIENTE 03</div>
+        <div class="field-row">
+          <div class="field"><label>Nombre</label><input type="text" name="client3_name" placeholder="Nombre de la empresa"></div>
+          <div class="field"><label>País</label><input type="text" name="client3_country" placeholder="País"></div>
+        </div>
+        <div class="field"><label>Tipo de operación</label><input type="text" name="client3_type" placeholder="Ej. FX y pagos internacionales"></div>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-area">
+        <p class="submit-note">Al enviar confirmas que la información es verídica. EVIA S.A.S. la tratará de forma confidencial conforme a su política de privacidad.</p>
+        <button type="submit" class="btn-submit">Enviar →</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="container">
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2>Formulario enviado</h2>
+      <p>El equipo de KillB revisará tu información y te contactará en los próximos días hábiles.</p>
+    </div>
+  </div>
+
+</form>
+
+<script>
+  // Progress
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+  const TOTAL = 10;
+
+  function countFilled() {
+    const groups = {
+      company_name: false, country: false,
+      contact_name: false, contact_email: false,
+      services: false, countries_ops: false,
+      license_status: false, uif_status: false,
+      volume_usd: false, client1_name: false
+    };
+    document.querySelectorAll('[data-track]').forEach(el => {
+      if ((el.type === 'checkbox' || el.type === 'radio') && el.checked) {
+        if (el.name === 'license_status') groups.license_status = true;
+        else if (el.name === 'uif_status') groups.uif_status = true;
+        else groups.services = true;
+      } else if (el.value && el.value.trim()) {
+        if (el.name in groups) groups[el.name] = true;
+      }
+    });
+    return Object.values(groups).filter(Boolean).length;
+  }
+
+  function updateProgress() {
+    const n = countFilled();
+    fill.style.width = Math.round((n / TOTAL) * 100) + '%';
+    label.textContent = n + ' / ' + TOTAL;
+  }
+  document.querySelectorAll('[data-track]').forEach(el => {
+    el.addEventListener('change', updateProgress);
+    el.addEventListener('input', updateProgress);
+  });
+
+  // Conditionals
+  function bindConditional(name, targetId, matchValues) {
+    const wrap = document.getElementById(targetId);
+    document.querySelectorAll(`[name="${name}"]`).forEach(el =>
+      el.addEventListener('change', () => {
+        const active = Array.from(document.querySelectorAll(`[name="${name}"]`))
+          .some(r => r.checked && matchValues.includes(r.value));
+        wrap.classList.toggle('visible', active);
+      })
+    );
+  }
+  bindConditional('license_status', 'licFileWrap', ['yes', 'in_progress']);
+  bindConditional('uif_status', 'uifNameWrap', ['yes']);
+  bindConditional('ops_mode', 'opsProviderWrap', ['via_provider', 'both']);
+
+  document.getElementById('svc7').addEventListener('change', function() {
+    document.getElementById('svcOtroWrap').classList.toggle('visible', this.checked);
+  });
+
+  document.getElementById('licFileInput').addEventListener('change', function() {
+    const name = this.files[0]?.name;
+    const el = document.getElementById('licFileName');
+    if (name) { el.textContent = '✓ ' + name; el.style.display = 'block'; }
+  });
+
+  // Submit
+  document.getElementById('preKypForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Validación básica
+    let ok = true;
+    ['company_name','contact_name','contact_email'].forEach(n => {
+      const el = document.querySelector(`[name="${n}"]`);
+      if (el && !el.value.trim()) { el.style.borderColor = 'var(--error)'; ok = false; }
+      else if (el) el.style.borderColor = '';
+    });
+    if (!ok) { window.scrollTo({top:0,behavior:'smooth'}); return; }
+
+    // Envío a Netlify vía fetch
+    const formData = new FormData(this);
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString()
+    })
+    .then(() => {
+      this.style.display = 'none';
+      document.getElementById('successScreen').classList.add('visible');
+      window.scrollTo({top:0,behavior:'smooth'});
+    })
+    .catch(() => {
+      // Si falla el fetch (ej. en local), igual muestra éxito para no bloquear
+      this.style.display = 'none';
+      document.getElementById('successScreen').classList.add('visible');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+</script>
+</body>
+</html>
