@@ -344,7 +344,7 @@
   <div class="progress-label" id="progressLabel">0 / 10</div>
 </div>
 
-<form id="preKypForm" novalidate>
+<form id="preKypForm" action="https://formspree.io/f/xnjywyzj" method="POST">
 
   <!-- Netlify required fields -->
   <!-- 01 IDENTIFICACIÓN -->
@@ -635,45 +635,8 @@
     if (name) { el.textContent = '✓ ' + name; el.style.display = 'block'; }
   });
 
-  // Submit
-  document.getElementById('preKypForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    // Validación básica
-    let ok = true;
-    ['company_name','contact_name','email'].forEach(n => {
-      const el = document.querySelector(`[name="${n}"]`);
-      if (el && !el.value.trim()) { el.style.borderColor = 'var(--error)'; ok = false; }
-      else if (el) el.style.borderColor = '';
-    });
-    if (!ok) { window.scrollTo({top:0,behavior:'smooth'}); return; }
+  // Submit — el form hace POST directo a Formspree, no necesita JS
 
-    const form = this;
-    const data = new FormData(form);
-
-    fetch('https://formspree.io/f/xnjywyzj', {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json' }
-    })
-    .then(function(response) {
-      if (response.ok) {
-        form.style.display = 'none';
-        document.getElementById('successScreen').classList.add('visible');
-        window.scrollTo({top:0,behavior:'smooth'});
-      } else {
-        return response.json().then(function(data) {
-          if (data.errors) {
-            alert('Error: ' + data.errors.map(e => e.message).join(', '));
-          } else {
-            alert('Hubo un error al enviar. Intenta de nuevo.');
-          }
-        });
-      }
-    })
-    .catch(function() {
-      alert('Error de conexión. Verifica tu internet e intenta de nuevo.');
-    });
-  });
 </script>
 </body>
 </html>
