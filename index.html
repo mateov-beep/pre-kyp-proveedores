@@ -647,23 +647,31 @@
     });
     if (!ok) { window.scrollTo({top:0,behavior:'smooth'}); return; }
 
-    // Envío a Formspree
-    const formData = new FormData(this);
+    const form = this;
+    const data = new FormData(form);
+
     fetch('https://formspree.io/f/xnjywyzj', {
       method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: formData
+      body: data,
+      headers: { 'Accept': 'application/json' }
     })
-    .then(() => {
-      this.style.display = 'none';
-      document.getElementById('successScreen').classList.add('visible');
-      window.scrollTo({top:0,behavior:'smooth'});
+    .then(function(response) {
+      if (response.ok) {
+        form.style.display = 'none';
+        document.getElementById('successScreen').classList.add('visible');
+        window.scrollTo({top:0,behavior:'smooth'});
+      } else {
+        return response.json().then(function(data) {
+          if (data.errors) {
+            alert('Error: ' + data.errors.map(e => e.message).join(', '));
+          } else {
+            alert('Hubo un error al enviar. Intenta de nuevo.');
+          }
+        });
+      }
     })
-    .catch(() => {
-      // Si falla el fetch (ej. en local), igual muestra éxito para no bloquear
-      this.style.display = 'none';
-      document.getElementById('successScreen').classList.add('visible');
-      window.scrollTo({top:0,behavior:'smooth'});
+    .catch(function() {
+      alert('Error de conexión. Verifica tu internet e intenta de nuevo.');
     });
   });
 </script>
