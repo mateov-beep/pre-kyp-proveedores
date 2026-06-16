@@ -385,7 +385,7 @@
       <div class="field-row">
         <div class="field">
           <label>Correo electrónico <span class="req">*</span></label>
-          <input type="email" name="contact_email" placeholder="contacto@empresa.com" data-track>
+          <input type="email" name="email" placeholder="contacto@empresa.com" data-track>
         </div>
         <div class="field">
           <label>Sitio web</label>
@@ -583,7 +583,7 @@
   function countFilled() {
     const groups = {
       company_name: false, country: false,
-      contact_name: false, contact_email: false,
+      contact_name: false, email: false,
       services: false, countries_ops: false,
       license_status: false, uif_status: false,
       volume_usd: false, client1_name: false
@@ -640,7 +640,7 @@
     e.preventDefault();
     // Validación básica
     let ok = true;
-    ['company_name','contact_name','contact_email'].forEach(n => {
+    ['company_name','contact_name','email'].forEach(n => {
       const el = document.querySelector(`[name="${n}"]`);
       if (el && !el.value.trim()) { el.style.borderColor = 'var(--error)'; ok = false; }
       else if (el) el.style.borderColor = '';
